@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalolsavam Poster Generator | ഉപജില്ലാ സ്കൂൾ കലോത്സവ പോസ്റ്റർ മേക്കർ</title>
+  
+  <!-- Self-contained stylesheet (Works offline & on file://) -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      
+      <!-- Brand & Title -->
+      <div class="brand-wrapper">
+        <div class="brand-logo">
+          <svg width="22" height="22" style="width: 22px; height: 22px;" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">
+            <span data-i18n="appTitle">Kalolsavam Poster Maker</span>
+            <span data-i18n="badgePro" class="badge-pill">Sub-District Pro</span>
+          </h1>
+          <p data-i18n="appSubtitle" class="brand-subtitle">Create stunning congratulatory posters for Sub-District School Kalolsavam</p>
+        </div>
+      </div>
+
+      <!-- Controls: Language Toggle & Batch Mode -->
+      <div class="header-actions">
+        <!-- Language Switcher -->
+        <button id="langToggleBtn" type="button" class="btn btn-lang">
+          <span>🌐</span>
+          <span id="langLabel">English / മലയാളം</span>
+        </button>
+
+        <!-- Next Student (Batch Mode) -->
+        <button id="nextStudentBtn" type="button" class="btn btn-batch" title="Keep festival & school, prepare for next student">
+          <svg width="15" height="15" style="width: 15px; height: 15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+          <span data-i18n="nextStudentBtn">Next Student (Batch Mode)</span>
+        </button>
+
+        <!-- Reset Button -->
+        <button id="resetAllBtn" type="button" class="btn btn-icon-only" title="Reset all fields">
+          <svg width="18" height="18" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile View Toggle -->
+  <div class="mobile-tabs">
+    <button id="tabFormBtn" type="button" data-i18n="tabEdit" class="mobile-tab-btn active">
+      ✏️ വിവരങ്ങൾ നൽകുക (Edit)
+    </button>
+    <button id="tabPreviewBtn" type="button" data-i18n="tabPreview" class="mobile-tab-btn">
+      🖼️ പോസ്റ്റർ കാണുക (Preview)
+    </button>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-wrapper">
+    
+    <!-- LEFT COLUMN: Form Controls & Customization -->
+    <div id="controlsContainer" class="form-column">
+
+      <!-- Poster Language Selector Bar -->
+      <div class="card-panel" style="padding: 0.75rem 1rem; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.1rem;">🗣️</span>
+          <span data-i18n="posterLangLabel" style="font-size: 0.8rem; font-weight: 700; color: #fde047;">പോസ്റ്റർ ഭാഷ:</span>
+        </div>
+        <select id="posterLangSelect" class="form-select" style="width: auto; padding: 0.35rem 0.75rem; font-weight: 700; color: #fde047;">
+          <option value="en" selected>English (ഇംഗ്ലീഷ്)</option>
+          <option value="ml">മലയാളം (Malayalam)</option>
+        </select>
+      </div>
+
+      <!-- Manglish Helper Toggle -->
+      <div class="card-panel" style="padding: 0.75rem 1rem; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <span style="font-size: 1.1rem;">⌨️</span>
+          <div>
+            <div data-i18n="manglishTitle" style="font-size: 0.8rem; font-weight: 600; color: #f1f5f9;">മലയാളം / മാംഗ്ലീഷ് ടൈപ്പിംഗ്</div>
+            <div data-i18n="manglishDesc" style="font-size: 0.7rem; color: #94a3b8;">ഇംഗ്ലീഷിലോ മലയാളത്തിലോ നേരിട്ട് ടൈപ്പ് ചെയ്യാം</div>
+          </div>
+        </div>
+        <label style="position: relative; display: inline-flex; align-items: center; cursor: pointer;">
+          <input type="checkbox" id="manglishToggle" style="accent-color: #eab308; width: 1.15rem; height: 1.15rem;">
+        </label>
+      </div>
+
+      <!-- SCHOOL LOGO CARD (Anjarakandy HSS Logo) -->
+      <div class="card-panel">
+        <div class="card-header">
+          <h2 data-i18n="secLogo" class="card-title">
+            <span>🏫</span> സ്കൂൾ ലോഗോ (School Logo)
+          </h2>
+          <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.75rem; color: #fde047; font-weight: 600;">
+            <input type="checkbox" id="showLogoToggle" checked style="accent-color: #eab308;">
+            <span data-i18n="lblShowLogo">കാണിക്കുക</span>
+          </label>
+        </div>
+
+        <!-- Logo Preview Box -->
+        <div style="background: rgba(6, 11, 22, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; padding: 0.75rem; display: flex; align-items: center; justify-content: center; min-height: 70px; margin-bottom: 0.75rem;">
+          <img id="logoPreviewImg" src="assets/school_logo.png" alt="School Logo" style="max-height: 55px; max-width: 100%; object-fit: contain;">
+        </div>
+
+        <!-- Logo Settings: Position & Size -->
+        <div class="form-row" style="margin-bottom: 0.65rem;">
+          <div>
+            <label data-i18n="lblLogoPos" class="form-label" style="margin-bottom: 0.25rem;">ലോഗോ സ്ഥാനം:</label>
+            <select id="logoPositionSelect" class="form-select" style="font-size: 0.75rem;">
+              <option value="top_center" data-i18n="optLogoTopCenter">മുകളിൽ നടുവിലായി (Top Center)</option>
+              <option value="top_right" data-i18n="optLogoTopRight">മുകളിൽ വലതുവശത്ത് (Top Right)</option>
+              <option value="top_left" data-i18n="optLogoTopLeft">മുകളിൽ ഇടതുവശത്ത് (Top Left)</option>
+              <option value="above_results" data-i18n="optLogoAboveResults">ഫലങ്ങൾക്ക് മുകളിലായി (Above Results)</option>
+            </select>
+          </div>
+          <div>
+            <label data-i18n="lblLogoScale" class="form-label" style="margin-bottom: 0.25rem;">വലിപ്പം (Size):</label>
+            <input type="range" id="logoScaleSlider" min="0.6" max="1.4" step="0.05" value="1.0" class="range-slider" style="margin-top: 0.5rem; width: 100%;">
+          </div>
+        </div>
+
+        <!-- Upload or Reset Logo -->
+        <div style="display: flex; gap: 0.5rem;">
+          <label class="btn btn-secondary" style="flex: 1; cursor: pointer; text-align: center; font-size: 0.72rem;">
+            <span data-i18n="btnUploadLogo">പുതിയ ലോഗോ മാറ്റുക</span>
+            <input type="file" id="logoInput" accept="image/*" style="display: none;">
+          </label>
+          <button id="resetLogoBtn" type="button" class="btn btn-secondary" style="font-size: 0.72rem;">
+            <span data-i18n="btnResetLogo">റീസെറ്റ്</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SECTION 1: Festival Details -->
+      <div class="card-panel">
+        <div class="card-header">
+          <h2 data-i18n="secFestival" class="card-title">
+            <span>🎪</span> ഉത്സവ വിവരങ്ങൾ (Festival Details)
+          </h2>
+          <span data-i18n="autoSaveHint" class="card-hint">തനിയെ സേവ് ആകും</span>
+        </div>
+
+        <!-- Sub-District -->
+        <div class="form-group">
+          <div class="label-row">
+            <label data-i18n="lblSubDistrict" class="form-label">Sub-District</label>
+            <select id="subDistrictSelect" class="form-select" style="width: auto; padding: 0.2rem 0.5rem; font-size: 0.72rem; color: #fde047;">
+            </select>
+          </div>
+          <input type="text" id="subDistrict" value="Kannur South Sub-District" class="form-input form-input-gold">
+        </div>
+
+        <!-- Kalolsavam Title -->
+        <div class="form-group">
+          <label data-i18n="lblTitle" class="form-label" style="margin-bottom: 0.3rem;">Kalolsavam Title</label>
+          <textarea id="kalolsavamTitle" rows="2" class="form-textarea" style="font-weight: 700; font-size: 0.95rem;">Kerala School&#10;Kalolsavam</textarea>
+        </div>
+
+        <!-- Venue -->
+        <div class="form-group">
+          <label data-i18n="lblVenue" class="form-label" style="margin-bottom: 0.3rem;">Venue</label>
+          <input type="text" id="venue" value="At Anjarakandy Higher Secondary School" class="form-input">
+        </div>
+
+        <!-- Dates -->
+        <div class="form-group">
+          <label data-i18n="lblDates" class="form-label" style="margin-bottom: 0.3rem;">Dates</label>
+          <input type="text" id="dates" value="2026 November 11, 12, 13, 14" class="form-input">
+        </div>
+      </div>
+
+      <!-- SECTION 2: Student & Result Details -->
+      <div class="card-panel">
+        <div class="card-header">
+          <h2 data-i18n="secStudent" class="card-title">
+            <span>👤</span> Student & Result Details
+          </h2>
+        </div>
+
+        <!-- Student Name -->
+        <div class="form-group">
+          <label data-i18n="lblStudentName" class="form-label" style="margin-bottom: 0.3rem;">Student Name *</label>
+          <input type="text" id="studentName" value="Devika S. Kumar" class="form-input" style="font-size: 0.95rem; font-weight: 800; border-color: rgba(234, 179, 8, 0.4);">
+        </div>
+
+        <!-- Event / Item -->
+        <div class="form-group">
+          <div class="label-row">
+            <label data-i18n="lblItem" class="form-label">Competition Event / Item</label>
+            <span data-i18n="hintSelectBelow" style="font-size: 0.68rem; color: #94a3b8;">Choose from below ⤵</span>
+          </div>
+          <input type="text" id="itemName" list="itemsDatalist" value="Mohiniyattam" class="form-input form-input-cyan">
+          <datalist id="itemsDatalist"></datalist>
+
+          <!-- Chips Container -->
+          <div id="itemChipsContainer" class="chips-container"></div>
+        </div>
+
+        <!-- School Name -->
+        <div class="form-group">
+          <label data-i18n="lblSchool" class="form-label" style="margin-bottom: 0.3rem;">School Name</label>
+          <input type="text" id="schoolName" value="Anjarakandy Higher Secondary School" class="form-input">
+        </div>
+
+        <!-- Position & Grade -->
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="lblPosition" class="form-label" style="margin-bottom: 0.3rem;">Position Secured</label>
+            <select id="positionSelect" class="form-select form-input-gold" style="margin-bottom: 0.4rem;"></select>
+            <input type="text" id="customPosition" value="First Place" class="form-input" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;">
+          </div>
+          <div class="form-group">
+            <label data-i18n="lblGrade" class="form-label" style="margin-bottom: 0.3rem;">Grade</label>
+            <select id="gradeSelect" class="form-select" style="font-weight: 700;"></select>
+          </div>
+        </div>
+
+        <!-- Greeting -->
+        <div class="form-group">
+          <label data-i18n="lblGreeting" class="form-label" style="margin-bottom: 0.3rem;">Congratulatory Message</label>
+          <input type="text" id="greeting" value="Congratulations!" class="form-input form-input-gold">
+        </div>
+      </div>
+
+      <!-- SECTION 3: Photo Upload & Adjustment -->
+      <div class="card-panel">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📸</span> 
+            <span data-i18n="secPhoto">വിദ്യാർത്ഥിയുടെ ഫോട്ടോ (Photo)</span>
+          </h2>
+          <button id="samplePhotoBtn" type="button" data-i18n="btnSamplePhoto" style="background: none; border: none; font-size: 0.72rem; color: #fde047; cursor: pointer; text-decoration: underline;">
+            സാമ്പിൾ ഫോട്ടോ പരീക്ഷിക്കുക 💃
+          </button>
+        </div>
+
+        <!-- Photo Upload Controls -->
+        <div class="photo-upload-row">
+          <label class="btn-upload">
+            <svg width="18" height="18" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span data-i18n="btnUploadPhoto">ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക</span>
+            <input type="file" id="photoInput" accept="image/*" style="display: none;">
+          </label>
+          <button id="clearPhotoBtn" type="button" disabled data-i18n="btnClearPhoto" class="btn btn-secondary" style="padding: 0.65rem 0.85rem;">
+            മാറ്റുക
+          </button>
+        </div>
+
+        <p data-i18n="photoHint" style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.5rem; line-height: 1.4;">
+          💡 പോസ്റ്ററിലെ ഫോട്ടോയിൽ നേരിട്ട് ഡ്രാഗ് ചെയ്ത് ഫേസ് അഡ്ജസ്റ്റ് ചെയ്യാം (Drag to position). Ctrl+V വഴിയും പേസ്റ്റ് ചെയ്യാം!
+        </p>
+
+        <!-- Zoom Slider -->
+        <div class="slider-panel">
+          <div class="slider-row">
+            <span data-i18n="lblZoom">സൂം (Zoom)</span>
+            <span id="zoomValue" style="color: #fde047; font-family: monospace; font-weight: 700;">100%</span>
+          </div>
+          <div class="slider-controls">
+            <input type="range" id="zoomSlider" min="0.5" max="3" step="0.05" value="1" disabled class="range-slider">
+            <button id="rotateBtn" type="button" disabled title="Rotate 90°" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.72rem;">
+              🔄 90°
+            </button>
+            <button id="resetPhotoBtn" type="button" disabled data-i18n="btnResetPhoto" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.72rem;">
+              റീസെറ്റ്
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: Themes & Styles -->
+      <div class="card-panel">
+        <div class="card-header">
+          <h2 data-i18n="secTheme" class="card-title">
+            <span>🎨</span> കളർ തീമുകളും ശൈലിയും (Themes & Style)
+          </h2>
+        </div>
+
+        <!-- Themes Grid -->
+        <div class="themes-grid">
+          <button type="button" data-theme="royal_blue" class="theme-pill active">
+            <span class="theme-circle" style="background: linear-gradient(135deg, #0e3566, #38bdf8);"></span>
+            <span data-i18n="optThemeRoyal">റോയൽ ബ്ലൂ ⭐</span>
+          </button>
+          <button type="button" data-theme="maroon_gold" class="theme-pill">
+            <span class="theme-circle" style="background: linear-gradient(135deg, #6b1122, #f43f5e);"></span>
+            <span data-i18n="optThemeMaroon">മെറൂൺ ഗോൾഡ്</span>
+          </button>
+          <button type="button" data-theme="emerald_gold" class="theme-pill">
+            <span class="theme-circle" style="background: linear-gradient(135deg, #064e3b, #34d399);"></span>
+            <span data-i18n="optThemeEmerald">എമറാൾഡ് ഗ്രീൻ</span>
+          </button>
+          <button type="button" data-theme="violet_majesty" class="theme-pill">
+            <span class="theme-circle" style="background: linear-gradient(135deg, #3b0764, #c084fc);"></span>
+            <span data-i18n="optThemeViolet">ഇംപീരിയൽ വയലറ്റ്</span>
+          </button>
+          <button type="button" data-theme="obsidian_gold" class="theme-pill">
+            <span class="theme-circle" style="background: linear-gradient(135deg, #18181b, #71717a);"></span>
+            <span data-i18n="optThemeObsidian">ഡാർക്ക് ലക്ഷ്വറി</span>
+          </button>
+        </div>
+
+        <!-- Toggles -->
+        <div class="toggles-grid">
+          <label class="toggle-label">
+            <input type="checkbox" id="showStarsToggle" checked>
+            <span data-i18n="optShowStars">✨ സ്പാർക്കിൾ സ്റ്റാർസ്</span>
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="showBokehToggle" checked>
+            <span data-i18n="optShowBokeh">🔮 ബൊക്കെ പ്രഭ</span>
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="showKathakaliToggle" checked>
+            <span data-i18n="optShowKathakali">🎭 കലോത്സവ മുദ്ര</span>
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="hideLabelsToggle" checked>
+            <span data-i18n="optHideLabels">🏷️ ലേബൽ ഒഴിവാക്കുക (Clean Badges)</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Sticky Canvas Preview & Actions -->
+    <div id="previewContainer" class="preview-column preview-sticky">
+      
+      <!-- Aspect Ratio Bar -->
+      <div class="aspect-bar">
+        <div class="aspect-group">
+          <span data-i18n="aspectLabel" style="font-size: 0.72rem; color: #94a3b8; font-weight: 600; margin-right: 0.25rem;">അളവ്:</span>
+          <button type="button" data-aspect="4:5" data-i18n="aspectPoster" class="aspect-pill active">
+            4:5 ക്ലാസിക് പോസ്റ്റർ
+          </button>
+          <button type="button" data-aspect="9:16" data-i18n="aspectStatus" class="aspect-pill">
+            9:16 വാട്സാപ്പ് സ്റ്റാറ്റസ്
+          </button>
+          <button type="button" data-aspect="1:1" data-i18n="aspectSquare" class="aspect-pill">
+            1:1 സ്ക്വയർ
+          </button>
+        </div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span data-i18n="liveHd">Live HD Preview</span>
+        </div>
+      </div>
+
+      <!-- Canvas Viewport -->
+      <div class="canvas-viewport">
+        <canvas id="posterCanvas"></canvas>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-grid-main">
+        <button id="downloadPngBtn" type="button" class="btn btn-primary-gold">
+          <svg width="18" height="18" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span data-i18n="btnDownloadPng">HD പോസ്റ്റർ ഡൗൺലോഡ് (PNG)</span>
+        </button>
+        <button id="shareWhatsappBtn" type="button" class="btn btn-whatsapp">
+          <svg width="18" height="18" style="width: 18px; height: 18px;" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          <span data-i18n="btnShareWhatsapp">വാട്സാപ്പിൽ പങ്കിടുക (Share)</span>
+        </button>
+      </div>
+
+      <div class="actions-grid-sub">
+        <button id="downloadJpgBtn" type="button" class="btn btn-secondary">
+          <svg width="16" height="16" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span data-i18n="btnDownloadJpg">ഡൗൺലോഡ് (JPG)</span>
+        </button>
+        <button id="copyClipboardBtn" type="button" class="btn btn-secondary">
+          <svg width="16" height="16" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          <span data-i18n="btnCopyClipboard">കോപ്പി ചെയ്യുക (Copy)</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-popup">
+    പോസ്റ്റർ റെഡിയായി!
+  </div>
+
+  <!-- Mobile View Toggle Script -->
+  <script>
+    var tabFormBtn = document.getElementById("tabFormBtn");
+    var tabPreviewBtn = document.getElementById("tabPreviewBtn");
+    var controlsContainer = document.getElementById("controlsContainer");
+    var previewContainer = document.getElementById("previewContainer");
+
+    if (tabFormBtn && tabPreviewBtn) {
+      tabFormBtn.addEventListener("click", function() {
+        tabFormBtn.classList.add("active");
+        tabPreviewBtn.classList.remove("active");
+        controlsContainer.classList.remove("hide-on-mobile");
+        previewContainer.classList.add("hide-on-mobile");
+      });
+
+      tabPreviewBtn.addEventListener("click", function() {
+        tabPreviewBtn.classList.add("active");
+        tabFormBtn.classList.remove("active");
+        previewContainer.classList.remove("hide-on-mobile");
+        controlsContainer.classList.add("hide-on-mobile");
+      });
+    }
+  </script>
+
+  <!-- Default Logo Data URL -->
+  <script src="js/defaultLogo.js"></script>
+  <!-- Complete Application Script (No type="module", runs everywhere) -->
+  <script src="js/app.js"></script>
+</body>
+</html>
